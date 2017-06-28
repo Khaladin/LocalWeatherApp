@@ -1,12 +1,13 @@
 var APPID = "303d0c3b957b66c8a4cb802462d0ad04"
 var temp;
 var loc;
-var icon;
 var humidity;
 var wind;
 var direction;
 var type;
 var body;
+var kelvin;
+var weather = {};
 
 function updateByZip(zip) {
 	var url = "http://api.openweathermap.org/data/2.5/weather?" + 
@@ -28,13 +29,14 @@ function sendRequest(url) {
 	xmlhttp.onreadystatechange = function() { //this is called a callback, talks to website
 		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
 			var data = JSON.parse(xmlhttp.responseText);
-			var weather = {};
-			weather.icon = data.weather[0].id;
+			//var weather = {};
+			kelvin = data.main.temp;
 			weather.humidity = data.main.humidity;
 			weather.wind = data.wind.speed;
 			weather.direction = degToDirection(data.wind.deg);
 			weather.loc = data.name;
 			weather.temp = K2C(data.main.temp);
+			weather.kelvin = data.main.temp;
 			weather.type = data.weather[0].main;
 			update(weather);
 		}
@@ -48,6 +50,9 @@ function K2C(k) {
 }
 function K2F(k) {
 	return Math.round(k*(9/5)-459.67);
+}
+function C2K(k) {
+	return Math.round(k + 273.15)
 }
 var degs;
 function degToDirection(degs) {
@@ -72,13 +77,24 @@ function degToDirection(degs) {
 		}
 	
 }
+var FC = true;
+
+function changeTemp() {
+	if (FC) {
+		document.getElementById("temperature").innerHTML = K2F(weather.kelvin);
+		FC = false;
+	} else if (!FC) {
+		document.getElementById("temperature").innerHTML = K2C(weather.kelvin);
+		FC = true;
+	}
+}
+
 function update(weather) {
 	wind.innerHTML = weather.wind;
 	direction.innerHTML = weather.direction;
 	humidity.innerHTML = weather.humidity;
 	loc.innerHTML = weather.loc;
 	temp.innerHTML = weather.temp;
-	icon.src = "imgs/code/" + weather.icon + ".png"; // need to put in custom pictures from own folder
 	type.innerHTML = weather.type;
 	if (type.innerHTML == "Clear") {
 		document.body.style.backgroundImage = "url(https://static.pexels.com/photos/46160/field-clouds-sky-earth-46160.jpeg)"
@@ -86,18 +102,21 @@ function update(weather) {
 		document.body.style.backgroundImage = "url(http://cdn.wallpapersafari.com/16/94/oa3LSD.jpg)"
 	}
 }
+
+
 function showPosition(position) {
 	updateByGeo(position.coords.latitude, position.coords.longitude);
 }
 
+
 window.onload = function() {
 	temp = document.getElementById("temperature");
 	loc = document.getElementById("location");
-	icon = document.getElementById("icon");
 	humidity = document.getElementById("humidity");
 	wind = document.getElementById("wind");
 	direction = document.getElementById("direction");
 	type = document.getElementById("type");
+
 
 	if(navigator.geolocation){
 			navigator.geolocation.getCurrentPosition(showPosition);
