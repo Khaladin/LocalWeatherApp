@@ -100,6 +100,12 @@ function update(weather) {
 		document.body.style.backgroundImage = "url(https://static.pexels.com/photos/46160/field-clouds-sky-earth-46160.jpeg)"
 	} else if (type.innerHTML == "Rain") {
 		document.body.style.backgroundImage = "url(http://cdn.wallpapersafari.com/16/94/oa3LSD.jpg)"
+	} else if (type.innerHTML == "Thunderstorm") {
+		document.body.style.backgroundImage = "url(http://www.iit.edu/~ahutches/images/thunderstorm.jpg)"
+	} else if (type.innerHTML == "Mist") {
+		document.body.style.backgroundImage = "url(https://2.bp.blogspot.com/-9DAIGEOJnkw/WABI7ALb7fI/AAAAAAAAQ2c/g8RFMiG6d3MhgD0KA_ku769ntFMfNvBkACLcB/s1600/Mist%2Bwallpapers%2B1.jpg)"
+	} else if (type.innerHTML == "Clouds") {
+		document.body.style.backgroundImage = "url(https://static.pexels.com/photos/53594/blue-clouds-day-fluffy-53594.jpeg)"
 	}
 }
 
